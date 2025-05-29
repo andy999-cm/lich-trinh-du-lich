@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LỊCH TRÌNH NGHỈ DƯỠNG/ DU LỊCH</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #f8f9fa, #e8f0fe);
+    }
+    h1 {
+      text-align: center;
+      padding: 30px 0 10px;
+      color: #1a237e;
+      font-size: 2.2rem;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 20px;
+    }
+    .activities, .itinerary {
+      flex: 1 1 40%;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .activities:hover, .itinerary:hover {
+      transform: scale(1.02);
+    }
+    .activities h2, .itinerary h2 {
+      text-align: center;
+      color: #3949ab;
+    }
+    .activity {
+      padding: 12px 15px;
+      margin: 8px 0;
+      background-color: #f1f8e9;
+      border-left: 6px solid #66bb6a;
+      border-radius: 8px;
+      cursor: grab;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    .activity:hover {
+      background-color: #dcedc8;
+    }
+    .itinerary-slot {
+      min-height: 60px;
+      border: 2px dashed #90a4ae;
+      margin: 12px 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background-color: #fafafa;
+      font-weight: 500;
+      color: #455a64;
+    }
+  </style>
+</head>
+<body>
+  <h1>LỊCH TRÌNH NGHỈ DƯỠNG/ DU LỊCH</h1>
+  <div class="container">
+    <div class="activities">
+      <h2>Hoạt Động Gợi Ý</h2>
+      <div class="activity" draggable="true">Spa and Massage tại Coco Spa</div>
+      <div class="activity" draggable="true">Ăn sáng tại ParkView</div>
+      <div class="activity" draggable="true">Ăn trưa tại ParkView</div>
+      <div class="activity" draggable="true">Ăn tối tại ParkView</div>
+      <div class="activity" draggable="true">Thăm quan chợ Bến Thành</div>
+      <div class="activity" draggable="true">Thăm quan Dinh Độc Lập</div>
+      <div class="activity" draggable="true">Thăm quan nhà thờ Đức Bà</div>
+      <div class="activity" draggable="true">Mua sắm tại Takashimaya</div>
+    </div>
+
+    <div id="schedules" class="container"></div>
+  </div>
+
+  <script>
+    const dragged = {
+      item: null
+    };
+
+    function allowDrop(e) {
+      e.preventDefault();
+    }
+
+    function drop(e) {
+      e.preventDefault();
+      if (dragged.item) {
+        e.target.appendChild(dragged.item.cloneNode(true));
+      }
+    }
+
+    document.querySelectorAll('.activity').forEach(item => {
+      item.addEventListener('dragstart', () => dragged.item = item);
+    });
+
+    const schedulesContainer = document.getElementById('schedules');
+    const days = 3;
+    const timeSlots = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
+
+    for (let day = 1; day <= days; day++) {
+      const itinerary = document.createElement('div');
+      itinerary.className = 'itinerary';
+      itinerary.innerHTML = `<h2>Lịch trình ngày ${day}</h2>`;
+
+      timeSlots.forEach(slot => {
+        const slotDiv = document.createElement('div');
+        slotDiv.className = 'itinerary-slot';
+        slotDiv.ondragover = allowDrop;
+        slotDiv.ondrop = drop;
+        slotDiv.innerHTML = `${slot}:`;
+        itinerary.appendChild(slotDiv);
+      });
+
+      schedulesContainer.appendChild(itinerary);
+    }
+  </script>
+</body>
+</html>
